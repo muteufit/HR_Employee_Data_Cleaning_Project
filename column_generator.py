@@ -40,4 +40,66 @@ df.to_csv("final_employee_dataset.csv", index=False)
 print("Column generation complete. File saved as final_employee_dataset.csv")
 # Group by Department and get the mean
 avg_wait = df.groupby("Department")["Promotion_Waiting_Time"].mean()
-print(avg_wait)
+never_promoted_count = df[df["Never_Promoted"]].groupby("Department").size()
+# print(avg_wait)
+# print(never_promoted_count)
+cs = df[df["Department"] == "customer support"]["Promotion_Waiting_Time"]
+# print(cs.std())
+# print(cs.mean())
+never_promoted_rate = df.groupby("Department")["Hire_Date"].mean()  # * 100
+# print(never_promoted_rate.sort_values(ascending=False))
+
+summary = df.groupby("Department").agg(
+    avg_salary=("Salary", "mean"),
+    avg_satisfaction=("Satisfaction_Score", "mean"),
+    avg_performance=("Performance_Score", "mean"),
+    employee_count=("Employee_ID", "count"),  # Counts non-null Employee_IDs per dept
+)
+# print(summary)
+
+EMP1076 = df[df["Employee_ID"] == "EMP1076"]
+
+print("Tenure_Years: " + str(EMP1076["Tenure_Years"].iloc[0]))
+print("Years_Experience: " + str(EMP1076["Years_Experience"].iloc[0]))
+print("Performance_Score: " + str(EMP1076["Performance_Score"].iloc[0]))
+print("Working_Hours: " + str(EMP1076["Working_Hours"].iloc[0]))
+print("Overtime_Hours: " + str(EMP1076["Overtime_Hours"].iloc[0]))
+print("Projects_Completed: " + str(EMP1076["Projects_Completed"].iloc[0]))
+print("Remote_Work_Days: " + str(EMP1076["Remote_Work_Days"].iloc[0]))
+
+customer_support_employees_without_EMP1076 = df[
+    (df["Department"] == "customer support") & (df["Employee_ID"] != "EMP1076")
+]
+
+print(
+    "Customer Support - Tenure_Years: "
+    + str(customer_support_employees_without_EMP1076["Tenure_Years"].mean())
+)
+print(
+    "Customer Support - Years_Experience: "
+    + str(customer_support_employees_without_EMP1076["Years_Experience"].mean())
+)
+print(
+    "Customer Support - Performance_Score: "
+    + str(customer_support_employees_without_EMP1076["Performance_Score"].mean())
+)
+print(
+    "Customer Support - Working_Hours: "
+    + str(customer_support_employees_without_EMP1076["Working_Hours"].mean())
+)
+print(
+    "Customer Support - Overtime_Hours: "
+    + str(customer_support_employees_without_EMP1076["Overtime_Hours"].mean())
+)
+print(
+    "Customer Support - Projects_Completed: "
+    + str(customer_support_employees_without_EMP1076["Projects_Completed"].mean())
+)
+print(
+    "Customer Support - Remote_Work_Days: "
+    + str(customer_support_employees_without_EMP1076["Remote_Work_Days"].mean())
+)
+print(
+    "Customer Support - Average Salary: "
+    + str(customer_support_employees_without_EMP1076["Salary"].mean())
+)
